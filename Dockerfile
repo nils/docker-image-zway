@@ -1,8 +1,11 @@
-FROM resin/rpi-raspbian:jessie
+FROM codingwell/rpi-raspbian-qemu
 
 # needed to autoate the zway installation
 ENV BOXED yes
 ENV INSTALL_DIR /opt
+
+
+RUN [ "cross-build-start" ]
 
 # upgrade and install all the libs zway needs ourself in one go
 RUN apt-get update \
@@ -49,5 +52,7 @@ RUN /etc/init.d/mongoose stop \
 
 ENTRYPOINT ["/usr/bin/supervisord", "-c"]
 CMD ["/etc/supervisor/supervisord.conf"]
+
+RUN [ "cross-build-end" ]
 
 VOLUME /opt/z-way-server/config
